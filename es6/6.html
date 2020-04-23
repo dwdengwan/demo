@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function sum(num1,num2) {
+      return num1+num2;
+    }
+    var big = sum(2,5);
+    console.log(big);
+    function sumBig() {
+      // console.log(arguments.length);
+      let num =0;
+      for(let i=0;i<arguments.length;i++){
+        num += arguments[i];
+      }
+      return num;
+    }
+    console.log(sumBig(1));
+    console.log(sumBig(1,2,5,10));
+    function bigYang(num1,num2) {
+      // arguments[0] = 10;
+      // arguments[1] = arguments[0] + 10;
+      console.log(num1);
+      console.log(num2);
+    }
+    bigYang(1,1);
+    bigYang(2,2);
+    // console.log(bigYang(1,1));
+    // console.log(bigYang(2,2));
+  </script>
+</body>
+</html>

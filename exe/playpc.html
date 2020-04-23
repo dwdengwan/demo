@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>打字练习</title>
+</head>
+
+<body>
+  <style>
+    body,html{
+      width: 100%;
+      height: 100%;
+      background: pink;
+    }
+    *{
+      margin: 0;
+      padding:0;
+    }
+    .play{
+      width: 100%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .play span{
+      padding: 10px 10px 0 10px;
+      color:#000;
+      font-size: 16px;
+    }
+    .play input{
+      padding:10px 10px;
+      border:0;
+      color:#000;
+      font-size: 18px;
+    }
+    .play input:focus{
+      outline: none;
+      /* color:red; */
+    }
+  </style>
+  <div class="play">
+    <span id="span">abcdefg hijklmn opq rst uvw xyz</span>
+    <input type="text" id="input">
+    <script>
+      (function () {
+        var spanArr = span.innerHTML.split('');//文本内容数组
+        var inputArr = [];//输入框内容数组
+        window.onload = function () {
+          
+        }
+        input.oninput = function () {
+          inputArr = input.value.split('');
+          for(let i=0;i<inputArr.length;i++){
+            if(inputArr[i] == spanArr[i]){
+              input.style.color = '#000';
+            }else{
+              input.style.color = 'red';
+            }
+          }
+        }
+      })()
+    </script>
+  </div>
+</body>
+
+</html>

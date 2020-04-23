@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>轮播图</title>
+</head>
+
+<body>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 轮播 */
+    .lunbo {
+      padding: 2% 2%;
+    }
+
+    .lunbo .lunbo-one,
+    .lunbo .lunbo-two,
+    .lunbo .lunbo-three {
+      border: 1px solid red;
+      text-align: center;
+      height: 100px;
+      line-height: 100px;
+    }
+
+    /* 指示 */
+    .indicate {
+      position: absolute;
+      top: 4%;
+      right: 6%;
+    }
+
+    .indicate ul li {
+      border: 1px solid pink;
+    }
+  </style>
+  <div onclick="upChange(-1)">
+    --
+  </div>
+  <div class="lunbo" id="lunbo">
+    <div class="lunbo-one" id="lunboO">踏实</div>
+    <div class="lunbo-two" id="lunboT">可靠</div>
+    <div class="lunbo-three" id="lunboTh">踏实可靠</div>
+  </div>
+  <div class="indicate">
+    <ul>
+      <li onclick='display(0)' class="indicate-li">1</li>
+      <li onclick='display(1)' class="indicate-li">2</li>
+      <li onclick='display(2)' class="indicate-li">3</li>
+    </ul>
+  </div>
+  <div onclick="upChange(1)">
+    ++
+  </div>
+  <script>
+    var timer = '';//定时器
+    var index = 0;//图片下标
+    var length = 0;//图片的长度
+    length = document.getElementsByClassName('indicate-li').length;
+    window.onload = function () {
+      lunboO.style.display = 'block';
+      lunboT.style.display = 'none';
+      lunboTh.style.display = 'none';
+      lunbo(0)
+    }
+
+    function lunbo(t) {//轮播
+      index = t % length;
+      timer = setInterval(() => {
+        commonLunbo(t)
+        t++;
+      }, 2000);
+    }
+
+    function display(num) {//指示圆圈的点击
+      index = num;
+      clearInterval(timer)
+      commonLunbo(num)
+      num++;
+      lunbo(num)
+    }
+
+    function commonLunbo(num) {//公共轮播
+      index = num % length;
+      if (index == 0) {
+        lunboO.style.display = 'block';
+        lunboT.style.display = 'none';
+        lunboTh.style.display = 'none';
+      } else if (index == 1) {
+        lunboO.style.display = 'none';
+        lunboT.style.display = 'block';
+        lunboTh.style.display = 'none';
+      } else if (index == 2) {
+        lunboO.style.display = 'none';
+        lunboT.style.display = 'none';
+        lunboTh.style.display = 'block';
+      }
+    }
+
+    function upChange(num) {//上下点击
+      index+=num;
+      index += 1;
+      console.log(index);
+      display(index)
+    }
+  </script>
+</body>
+
+</html>

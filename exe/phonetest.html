@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>手机号码验证</title>
+</head>
+
+<body>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+    }
+    .phone{
+      display: flex;
+      width: 96%;
+      padding: 2% 2%;
+    }
+    /* 左 */
+    .phone .phone-right{
+      width: 25%;
+      text-align: center;
+    }
+    .phone .phone-right .phone-star{
+      font-size: 100%;
+      color:#b65a43;
+    }
+    .phone .phone-right .phone-number{
+      font-size: 100%;
+      color:#828282;
+      font-weight: 600;
+    }
+    /* 中 */
+    .phone .phone-middle{
+      width: 50%;
+    }
+    .phone .phone-middle .phone-middle-top input{
+      text-align: center;
+      border:1px solid #dbdbdb;
+      width: 100%;
+      height: 24px;
+    }
+    .phone .phone-middle .phone-middle-buttom span{
+      color:#828282;
+      font-size: 50%;
+      font-weight: 600;
+    }
+    /* 右 */
+    .phone .phone-left{
+      width: 25%;
+      text-align: center;
+    }
+    .phone .phone-left span{
+      color:#5a5a5a;
+      font-weight: bolder;
+    }
+  </style>
+  <div class="phone">
+    <div class="phone-right">
+      <span class="phone-star">*</span>
+      <span class="phone-number">手机号码</span>
+    </div>
+    <div class="phone-middle">
+      <div class="phone-middle-top">
+        <input type="text" id="input">
+      </div>
+      <div class="phone-middle-buttom">
+        <span id="span"></span>
+      </div>
+    </div>
+    <div class="phone-left">
+      <span>@163.com</span>
+    </div>
+  </div>
+  <script>
+    window.onload = function () {//页面初始化
+      console.log('dyk');
+      span.innerHTML = '请填写手机号码';
+      span.style.color = "#828282";
+    }
+    input.onblur = function () {//input 失去焦点
+      console.log(input.value);
+      let reg = /^1[3456789]\d{9}$/
+      if (input.value == '') {
+        span.innerHTML = '手机号码不能为空！';
+        span.style.color = "red";
+      }else if (!reg.test(input.value)) {
+        span.innerHTML = '手机号码格式有误！';
+        span.style.color = "red";
+      }else {
+        span.innerHTML = '手机号码格式正确';
+        span.style.color = "green";
+      }
+    }
+    input.onfocus = function () {//input 获取焦点
+      console.log('input');
+    }
+  </script>
+</body>
+
+</html>

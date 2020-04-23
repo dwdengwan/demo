@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    span{
+      border:1px solid red;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="yh-input" onblur="takeChange('=')">
+  <span onclick="takeChange('1')">1</span>
+  <span onclick="takeChange('2')">2</span>
+  <span onclick="takeChange('3')">3</span>
+  <span onclick="takeChange('4')">4</span>
+  <span onclick="takeChange('+')">+</span>
+  <span onclick="takeChange('-')">-</span>
+  <span onclick="takeChange('*')">*</span>
+  <span onclick="takeChange('/')">/</span>
+  <span onclick="takeChange('=')">=</span>
+  <script>
+    var inp = document.getElementById('yh-input')
+    function takeChange(str) {
+      if(str == '='){
+        inp.value = eval(inp.value)
+      }else{
+        inp.value += str;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>手机号验证</title>
+</head>
+
+<body>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+    }
+    span{
+      color:#8a8a8a;
+    }
+    input{
+      border:1px solid #d7d7d7;
+      /* box-shadow: 1px 1px 1px 1px #d7d7d7; */
+    }
+    .test{
+      padding:10px 2%;
+    }
+    /* 手机号码验证的样式 */
+    .test .test-phone{
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-top: 2%;
+    }
+    .test .test-phone .phone-right{
+      width: 25%;
+      display: flex;
+      align-items: center;
+    }
+    .test .test-phone .phone-right .phone-right-star{
+      color:red;
+    }
+    .test .test-phone .phone-middle{
+      width: 51%;
+    }
+    .test .test-phone .phone-left{
+      width: 25%;
+    }
+    /* 图片验证的样式 */
+    .test .test-picture{
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    .test .test-picture .picture-right{
+      width: 25%;
+    }
+    .test .test-picture .picture-right .picture-star{
+      color:red;
+      font-size: 100%;
+    }
+    .test .test-picture .picture-right .picture-number{
+      font-size: 90%;
+    }
+    .test .test-picture .picture-middl{
+      width: 50%;
+    }
+    .test .test-picture .picture-left{
+      width: 25%;
+    }
+  </style>
+  <div class="test">
+    <div class="test-phone">
+      <div class="phone-right">
+        <span class="phone-right-star">*</span>
+        <span class="phone-right-number">手机号码</span>
+      </div>
+      <div class="phone-middle">
+        <div>
+          <input id="phoneInput" type="number" onblur="blur()">
+        </div>
+        <div>
+          <span id="phone-tishi">请填写手机号码</span>
+        </div>
+      </div>
+      <div class="phone-left">
+        <span>@163.com</span>
+      </div>
+    </div>
+    <div class="test-picture">
+      <div class="picture-right">
+        <span class="picture-star">*</span>
+        <span class="picture-number">图片验证码</span>
+      </div>
+      <div class="picture-middle">
+        <div>
+          <input type="text" id="numTest" onblur="blurTest()">
+        </div>
+        <div>
+          <span>
+            请填写图片中的字符，不区分大小写
+          </span>
+        </div>
+      </div>
+      <div class="picture-left">
+        <div>
+          <span id="testnum"></span>
+        </div>
+        <div>
+          <span onclick="aginTest()">看不清?换张图片</span>
+        </div>
+      </div>
+    </div>
+    <div class="test-authcode">
+      <div onclick="aginTest()">免费获取验证码</div>
+    </div>
+  </div>
+  <script>
+    phoneInput.blur = function () {
+      console.log(phoneInput.value);
+      let reg = /^1[3456789]\d{9}$/;
+      if (!reg.test(phoneInput.value)) {
+        phoneInput.value = '';
+      }
+    }
+    function blur() {//失去焦点事件
+
+    }
+    testnum.innerHTML = '98765'//页面显示
+    var num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    var bigArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    var littleArr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    var arr = [];
+    var str = '';
+    arr = arr.concat(num);
+    arr = arr.concat(bigArr);
+    arr = arr.concat(littleArr);
+    console.log(arr);
+
+
+    function blurTest() {
+      console.log(numTest.value.toLowerCase() + 'dw', str.toLowerCase() + 'dyk', '1');
+      if (numTest.value.toLowerCase() == str.toLowerCase()) {
+        console.log('dyk', '1');
+      } else {
+        console.log('dw', '1');
+      }
+    }
+    numTest.blur = function () {
+      console.log(numTest.value.toLowerCase(), str.toLowerCase(), '2');
+      if (numTest.value.toLowerCase() == str.toLowerCase()) {
+        console.log('dyk', '2');
+      } else {
+        console.log('dw', '2');
+      }
+    }
+
+    window.onload = function () {//页面加载时，初次渲染。
+      aginTest()
+    }
+
+    function aginTest() {
+      str = '';
+      for (let i = 0; i < 5; i++) {
+        let n = parseInt(Math.random() * arr.length);
+        str += arr[n];
+      }
+      testnum.innerHTML = str;
+    } 
+  </script>
+</body>
+
+</html>

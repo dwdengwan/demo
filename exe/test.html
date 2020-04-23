@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    let arr = [];
+    let obj = {
+      name: 'lili',
+      age: '19',
+    }
+    arr.push(obj);
+    console.log(arr)
+    obj = {
+      name: 'jj',
+      age: '22',
+    }
+    arr.push(obj);
+    console.log(arr);
+
+    let [...data] = [1, 2, 3, 4]
+    console.log(data);
+
+    function* fibs() {
+      let a = 0;
+      let b = 1;
+      while (true) {
+        yield a;
+        [a, b] = [b, a + b];
+      }
+    }
+    let [first, second, third, fourth, fifth, sixth] = fibs();
+    console.log(sixth);
+
+    // function* generator(i) {
+    //   yield i;
+    //   yield i + 20;
+    // }
+    // const gen = generator(10);
+    // console.log(gen.next().done);
+    // console.log(gen.next().value);
+
+    function* idMaker() {
+      let index = 0;
+      while (index < 3)
+        yield index++;
+    }
+    let gen = idMaker();
+    console.log(gen);
+    console.log(gen.next().value); // 0
+    console.log(gen.next().value); // 1
+    console.log(gen.next().value); // 2
+    console.log(gen.next().value); // undefined
+    // import a = '1';
+    // class a{
+    //   name:'1',
+    //   age:18,
+    // };
+  </script>
+</body>
+
+</html>

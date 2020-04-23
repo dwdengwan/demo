@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body id="body">
+  <style>
+    body {
+      background: pink;
+    }
+
+    h1 {
+      color: red;
+    }
+    .bg-color{
+      width: 500px;
+      height: 100px;
+      display: flex;
+      justify-content:space-between;
+      padding: 10px 0;
+    }
+    .bg-color .bg-div{
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border:1px solid #950217;
+    }
+    #bg-red{
+      background: red;
+    }
+    #bg-back{
+      background: #fff;
+    }
+    #bg-pink{
+      background: pink;
+    }
+  </style>
+  <div>
+    <div class="bg-color">
+      <div class="bg-div" id="bg-red" onclick="changeBG('red')"></div>
+      <div class="bg-div" id="bg-back" onclick="changeBG('back')"></div>
+      <div class="bg-div" id="bg-pink" onclick="changeBG('pink')"></div>
+    </div>
+    <h1 id="h1_text">0</h1>
+    <button id="btn">+</button>
+  </div>
+  <script>
+    var btn = document.getElementById('btn');
+    var num = document.getElementById('h1_text')
+    btn.onclick = function add() {
+      console.log(num.value);
+      // num.nodeValue++;
+    }
+    function changeBG(color) {//改变背景颜色
+      console.log(color);
+      var body = document.getElementById('body')
+      if(color == 'red'){
+        color = 'red';
+      }else if(color == 'back'){
+        color = '#fff';
+      }else if(color == 'pink'){
+        color = 'pink';
+      }
+      body.style.background = color;
+    }
+  </script>
+</body>
+
+</html>

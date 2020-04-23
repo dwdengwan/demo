@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text" id="row">
+  <button onclick="change()">确定</button>
+  <script>
+    var row = document.getElementById('row');//input
+    function change(){
+      var row1 = parseInt(row.value);
+      console.log(row1);
+      dw(row1);
+    }
+    function dw(num) {
+      var str = '';
+      for (let x = 1; x <= num; x++) {
+        for (let y = 1; y <= num * 2 - 1; y++) {
+          if (y < num - x + 1 || y > num + x - 1) {
+            str += ' ';
+          } else {
+            str += '*';
+          }
+          if (y == num * 2 - 1) {
+            str += '\n';
+          }
+        }
+      }
+      console.log(str);
+    }
+  </script> 
+</body>
+
+</html>

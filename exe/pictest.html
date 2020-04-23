@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>图片验证</title>
+</head>
+
+<body>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+    }
+    .pictest{
+      display:flex;
+      padding: 2% 0;
+      width: 100%;
+    }
+    /* 左 */
+    .pictest .pictest-right{
+      width: 25%;
+      text-align: right;
+    }
+    .pictest .pictest-right .pictest-star{
+      font-size: 80%;
+      color:#c56356;
+    }
+    .pictest .pictest-right .pictest-text{
+      font-size: 100%;
+      color: #7E7E7E;
+      font-weight: 600;
+    }
+    /* 中 */
+    .pictest .pictest-middle{
+      display: flex;
+      flex-direction:column;
+      justify-content:space-between;
+      margin-left:5%;
+      width: 40%;
+      text-align: left;
+    }
+    .pictest .pictest-middle .pictest-middle-top input{
+      border:1px solid #bdbdbd;
+      text-align: center;
+      width: 100%;
+      height: 22px;
+    } 
+    .pictest .pictest-middle .pictest-middle-buttom span{
+      color:#bdbdbd;
+      font-size: 50%;
+      font-weight: 600;
+      width: 100%;
+    } 
+    /* 右 */
+    .pictest .pictest-left{
+      display: flex;
+      flex-direction:column;
+      justify-content:space-between;
+      margin-left: 2%;
+      width: 28%;
+      text-align: left;
+    }
+    .pictest .pictest-left .pictest-left-top span{
+
+    }
+    .pictest .pictest-left .pictest-left-buttom span{
+      color:#48639a;
+      font-weight: 600;
+      font-size: 50%;
+    }
+    #myCanvas{
+      height: 24px;
+      width: 100px;
+    }
+  </style>
+  <div class="pictest">
+    <div class="pictest-right">
+      <span class="pictest-star">*</span>
+      <span class="pictest-text">图片验证码</span>
+    </div>
+    <div class="pictest-middle">
+      <div class="pictest-middle-top">
+        <input type="text" id="input">
+      </div>
+      <div class="pictest-middle-buttom">
+        <span id='span'>请填写图片中的字符，不区分大小写</span>
+      </div>
+    </div>
+    <div class="pictest-left">
+      <div class="pictest-left-top">
+        <!-- 971126 -->
+        <canvas id="myCanvas" width="100" height="24"></canvas>
+      </div>
+      <div class="pictest-left-buttom">
+        <span onclick="aginTest()">看不清？换张图片</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    var num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    var bigArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    var littleArr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    var arr = [];
+    var str = '';
+    var strArr = [];
+    var colorArr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+    var color = 'ffff00';
+    var width = 100;
+    var height = 24;
+    arr = arr.concat(num);
+    arr = arr.concat(bigArr);
+    arr = arr.concat(littleArr);
+
+    window.onload = function () {//页面初次渲染
+      aginTest()
+    }
+
+    input.onblur = function () {//input失去焦点
+      if (input.value == '') {
+        span.innerHTML = '输入的字符不能为空'
+        span.style.color = 'red';
+      } else if (input.value.toLowerCase() == str.toLowerCase()) {
+        span.innerHTML = '输入字符与图片中的字符一致'//请填写图片中的字符，不区分大小写
+        span.style.color = 'green';
+      } else {
+        span.innerHTML = '请输入正确的图片中的字符'
+        span.style.color = 'red';
+      }
+    }
+
+    input.onfocus = function () {//input获取焦点
+      // input.value = '';
+    }
+
+    function aginTest() {//随机获取六个字符串
+      clearCanvas()//清除画布
+      str = '';
+      color = '';
+      for (let i = 0; i < 6; i++) {
+        let n = parseInt(Math.random() * arr.length);
+        str += arr[n];
+        strArr = str.split('');
+      }
+      console.log(str);
+
+      //canvas绘图
+      let ctx = myCanvas.getContext("2d");//获取画笔
+      //画矩形
+      colorSelect()
+      ctx.fillStyle = "#" + color;
+      ctx.fillRect(0, 0, width, height);
+
+      //文本
+      for (let i = 0; i < strArr.length; i++) {
+        colorSelect()
+        ctx.strokeStyle = "#" + color;
+        ctx.font = "18px Arial";
+        ctx.strokeText(strArr[i], 12 * (i + 1), 18);//空心文字
+        // if(i%2==0){
+        //   ctx.fillText(strArr[i], 12 * (i + 1), 18);//实心文字
+        // }else{
+        //   ctx.strokeText(strArr[i], 12 * (i + 1), 18);//空心文字
+        // }
+      }
+
+      let xS = 0, yS = 0, xE = 0, yE = 0,x = 0,y = 0,r = 0;
+      for (let i = 0; i < 6; i++) {
+        //画直线
+        colorSelect()
+        xS = parseInt(Math.random() * width);//直线起点 x坐标
+        yS = parseInt(Math.random() * height);//直线起点 y坐标
+        xE = parseInt(Math.random() * width);//直线终点 x坐标
+        yE = parseInt(Math.random() * height);//直线终点 y坐标
+        x = parseInt(Math.random() * width);//圆心 x坐标
+        y = parseInt(Math.random() * height);//圆心 y坐标
+        r = parseInt(Math.random() * 5)+1;//半径
+        ctx.strokeStyle = "#" + color;
+        ctx.moveTo(xS, yS);
+        ctx.lineTo(xE, yE);
+        ctx.stroke();
+
+        //画圆
+        colorSelect()
+        ctx.strokeStyle = "#" + color;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+    }
+
+    function colorSelect() {//随机一种颜色
+      color = '';
+      for (let i = 0; i < 6; i++) {
+        let m = parseInt(Math.random() * colorArr.length);
+        color += colorArr[m];
+      }
+    }
+    //清除画布
+    function clearCanvas() {
+      let c = document.getElementById("myCanvas");
+      let cxt = c.getContext("2d");
+      cxt.beginPath();
+      cxt.fillRect(0, 0, width, height);
+      cxt.closePath();
+    }
+
+    //canvas绘图
+    // var ctx = myCanvas.getContext("2d");//获取画笔
+    //画矩形
+    // ctx.fillStyle = "#FF0000";
+    // ctx.fillRect(0, 0, width, height);
+
+    //画直线
+    // ctx.strokeStyle = "#00FF00";
+    // ctx.moveTo(0, 0);
+    // ctx.lineTo(width, height);
+    // ctx.stroke();
+
+    //画直线
+    // ctx.strokeStyle = "#00F0F0";
+    // ctx.moveTo(0, height);
+    // ctx.lineTo(width, 0);
+    // ctx.stroke();
+
+    //画圆
+    // ctx.strokeStyle = "#0000FF";
+    // ctx.beginPath();
+    // ctx.arc(50, 10, 10, 0, 2 * Math.PI);
+    // ctx.stroke();
+
+    //文本
+    // ctx.font = "16px Arial";
+    // ctx.fillText('971126', 10, 18);//实心文字
+    // ctx.strokeText('931213', 40, 18);//空心文字
+
+    // 创建渐变 直线渐变
+    // var grd = ctx.createLinearGradient(0, 0, width, 0);
+    // grd.addColorStop(0, "red");
+    // grd.addColorStop(1, "white");
+
+    // 填充渐变
+    // ctx.fillStyle = grd;
+    // ctx.fillRect(0, 0, width, height);
+
+    // 创建渐变 圆形渐变
+    // var grd = ctx.createRadialGradient(10, 10, 5, 90, 10, 5);
+    // grd.addColorStop(0, "red");
+    // grd.addColorStop(1, "white");
+
+    // 填充渐变
+    // ctx.fillStyle = grd;
+    // ctx.fillRect(0, 0, width, height);
+  </script>
+</body>
+
+</html>

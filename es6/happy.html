@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>2222</title>
+</head>
+
+<body>
+  <style>
+    h1 {
+      color: red;
+    }
+  </style>
+  <h1>1111</h1>
+  <button id="love_btn">check me</button>
+  <audio id="audio" src="苏打绿 - 我好想你 (Live).mp3" style="opacity:0" preload="auto" controls loop hidden="true" />
+  <script>
+    window.onload = function onload() {
+      var myAuto = document.getElementById('audio');
+      myAuto.play();
+      console.log('加载音乐 我好想你');
+    }
+    var btn = document.getElementById('love_btn');
+    btn.onclick = function btn_click() {
+      console.log('1111');
+    }
+  </script>
+</body>
+
+</html>

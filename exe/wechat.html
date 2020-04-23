@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>微信聊天</title>
+</head>
+
+<body>
+  <style>
+    /* 隐藏滚动条 */
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      background-color: transparent;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body,
+    html {
+      height: 100%;
+      width: 100%;
+      background: #efefef;
+    }
+
+    .wechat {
+      height: 100%;
+      width: 100%;
+    }
+
+    /* 上 */
+    .wechat .wechat-top {
+      height: 10%;
+      width: 100%;
+      background: red;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wechat .wechat-top span {
+      color: #fff;
+    }
+
+    /* 中 */
+    .wechat .wechat-middle {
+      height: 80%;
+      width: 96%;
+      padding: 0% 2%;
+      overflow: auto;
+      background: pink;
+    }
+
+    .wechat .wechat-middle .wechat-middle-time {
+      padding: 1% 0;
+      text-align: center;
+      color: #ededed;
+    }
+
+    .wechat .wechat-middle .wechat-middle-left {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 2% 0;
+    }
+
+    .wechat .wechat-middle .wechat-middle-left .mesay {
+      padding: 1%;
+      background: rgb(110, 168, 146);
+      color: #fff;
+      border-radius: 5px;
+      /* 超过最大宽度换行 */
+      max-width: 70%;
+      word-wrap: break-word;
+      word-break: break-all;
+      white-space: pre-wrap !important;
+    }
+
+    .wechat .wechat-middle .wechat-middle-left .meauto {
+      display: inline-block;
+      margin-left: 2%;
+      width: 30px;
+      height: 30px;
+      background: rgb(110, 168, 146);
+      border-radius: 50%;
+    }
+
+    .wechat .wechat-middle .wechat-middle-right {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 2% 0;
+    }
+
+    .wechat .wechat-middle .wechat-middle-right .shesay {
+      border: 1px solid #f0f0f0;
+      border-radius: 5px;
+      margin-left: 2%;
+      padding: 1%;
+      background: #f0f0f0;
+      color: #000;
+      max-width: 70%;
+      word-wrap: break-word;
+      word-break: break-all;
+      white-space: pre-wrap !important;
+    }
+
+    .wechat .wechat-middle .wechat-middle-right .sheauto {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background: #f0f0f0;
+      border-radius: 50%;
+    }
+
+    /* 下 */
+    .wechat .wechat-bottom {
+      height: 10%;
+      background: #ff00ff;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .wechat .wechat-bottom input {
+      width: 60%;
+      height: 60%;
+    }
+
+    .wechat .wechat-bottom textarea {
+      height: 60%;
+      vertical-align: middle;
+      font-size: 20px;
+      width: 60%;
+    }
+
+    .wechat .wechat-bottom .send {
+      width: 20%;
+      height: 50%;
+      color: #fff;
+      text-align: center;
+      line-height: 2;
+      border: 1px solid #00ffff;
+      background: #00ffff;
+    }
+
+    .wechat .wechat-bottom .add {
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 200%;
+      color: #000;
+      border: 1px solid #fff;
+      background: #fff;
+    }
+
+    /* 图片 */
+    .wechat .wechat-pic {
+      height: 39%;
+      padding: 1% 0 0 0;
+      background: #efefef;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .wechat .wechat-pic .uppic{
+      margin-left: 1%;
+      width: 24%;
+      height: 30%;
+      background: #00ffff;
+    }
+    .wechat .wechat-middle .up-pic {
+      margin-left: 1%;
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      background: #00ffff;
+    }
+  </style>
+  <div class="wechat">
+    <div class="wechat-top">
+      <span id="username"></span>
+    </div>
+    <div class="wechat-middle" id="view"></div>
+    <div class="wechat-bottom">
+      <!-- <input type="text" id='input'> -->
+      <textarea id='input'></textarea>
+      <span id="send" class="send" onclick='sendout(input.value)'>send</span>
+      <span id="add" class='add'>+</span>
+    </div>
+    <div class="wechat-pic" id="pictrue">
+      <div class="uppic"></div>
+    </div>
+  </div>
+  <script>
+    var wechat = document.getElementsByClassName('wechat')[0];
+    var wechatB = document.getElementsByClassName('wechat-bottom')[0];
+    var sayleft = document.getElementsByClassName('wechat-middle-left');
+    var sayright = document.getElementsByClassName('wechat-middle-right');
+    var mesay = document.getElementsByClassName('mesay');
+    var shesay = document.getElementsByClassName('shesay');
+    var time = document.getElementsByClassName('time');
+    var wechattime = document.getElementsByClassName('wechat-middle-time');
+    var wechatleft = document.getElementsByClassName('wechat-middle-left');
+    var wechatright = document.getElementsByClassName('wechat-middle-right');
+    var uppic = document.getElementsByClassName('uppic');
+    var downpic = '';//聊天区域里的图片
+    var n = 0;//点击发送的次数
+    var oldtime = 0;//当前时间的千毫秒
+    var height = 0;//聊天界面的高度
+    var timeStr = '';//当前时间
+    var html = '<div class="wechat-middle-time">' +
+      '<span class="time"></span>' +
+      '</div>' +
+      '<div class="wechat-middle-left">' +
+      '<span class="mesay"></span>' +
+      '<span class="meauto"></span>' +
+      '</div>' +
+      '<div class="wechat-middle-right">' +
+      '<span class="sheauto"></span>' +
+      '<span class="shesay"></span>' +
+      '</div>';
+    var htmlDiv = '<div class="up-pic"></div>';
+
+    window.onload = function () {//页面初始化
+      username.innerHTML = '豆豆';//聊天的人物名称
+      send.style.display = 'none'
+      pictrue.style.display = 'none';
+      localStorage.setItem('oldtime', oldtime)
+    }
+
+    wechat.onclick = function () {//整个屏幕点击事件
+      pictrue.style.display = 'none';
+      view.style.height = '80%';
+    }
+
+    wechatB.onclick = function (event) {//操作面板点击事件
+      event.stopPropagation();
+    }
+
+    pictrue.onclick = function (event) {//图片区域的点击事件
+      event.stopPropagation();
+    }
+
+    input.onfocus = function () {//input 获取焦点
+      pictrue.style.display = 'none';
+      view.style.height = '80%';
+    }
+
+    input.oninput = function () { //input 输入事件
+      if (input.value !== '') {
+        send.style.display = 'block';
+        add.style.display = 'none';
+      } else {
+        send.style.display = 'none';
+        add.style.display = 'block';
+      }
+    }
+
+    function displaytime() {//显示时间
+      var saytime = new Date();//当前时间
+      oldtime = Date.now();//当前时间的千毫秒
+      var year = saytime.getFullYear();
+      var month = saytime.getMonth() + 1;
+      var day = saytime.getDate();
+      var hours = saytime.getHours();
+      var min = saytime.getMinutes();
+      var s = saytime.getSeconds();
+      if (month < 10) {
+        month = '0' + month;
+      }
+      if (day < 10) {
+        day = '0' + day;
+      }
+      if (hours < 10) {
+        hours = '0' + hours;
+      }
+      if (min < 10) {
+        min = '0' + min;
+      }
+      if (s < 10) {
+        s = '0' + s;
+      }
+      timeStr = year + "-" + month + "-" + day + ' ' + hours + ':' + min + ':' + s;
+    }
+
+    function timeout() {//两次聊天时间间隔的判断
+      
+    }
+
+    function sendout(text) {//消息发送
+      displaytime()
+      if (text !== '') {
+        view.innerHTML += html;
+        mesay[n].innerHTML = text;
+        answer(text, n)
+        time[n].innerHTML = timeStr;//'2020-02-02 17:20:00'
+        //两次聊天时间间隔不超过3分钟 聊天时间不显示
+        if (oldtime - localStorage.getItem('oldtime') > 1000*60*3) {
+          time[n].style.display = 'block';
+        } else {
+          time[n].style.display = 'none';
+        }
+        height += wechattime[n].clientHeight;
+        height += wechatleft[n].clientHeight;
+        height += wechatright[n].clientHeight;
+        view.scrollTop = height;//滚动到指定的位置
+        sayleft[n].style.display = 'flex';
+        sayright[n].style.display = 'flex';
+        input.value = '';
+        send.style.display = 'none'
+        add.style.display = 'block';
+        n++;
+        localStorage.setItem('oldtime', oldtime)
+      }
+    }
+
+    add.onclick = function () {//添加按钮的点击
+      view.style.height = '40%';
+      pictrue.style.display = 'block';
+    }
+
+    uppic[0].onclick = function () {
+      let text = htmlDiv
+      sendout(text)
+      downpic = document.getElementsByClassName('up-pic')
+    }
+
+    // downpic[0].onclick = function () {
+    //   console.log('111');
+    // }
+
+    function answer(text, num) {//消息回答
+      if (text.indexOf('干嘛') !== -1) {
+        shesay[num].innerHTML = '在打豆豆.';
+      } else if (text.indexOf('玩') !== -1) {
+        shesay[num].innerHTML = '下次吧.';
+      } else if (text.indexOf('怎么样') !== -1) {
+        shesay[num].innerHTML = '还行.';
+      } else {
+        shesay[num].innerHTML = text;
+      }
+    }
+
+    view.onscroll = function (e) {//滚动条事件
+      scrollT = e.target.scrollTop;
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+      if (scrollHeight > clientHeight && scrollTop + clientHeight === scrollHeight) {
+        console.log('到底了');
+      }
+    }
+
+  </script>
+</body>
+
+</html>

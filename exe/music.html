@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>music</title>
+</head>
+
+<body id="body" onclick="endMusic()">
+  <style>
+    body {
+      /* background: pink; */
+    }
+    *{
+      padding: 0;
+      margin: 0;
+    }
+    html,#body{
+      width: 100%;
+      height: 100%;
+    }
+    .music {
+      user-select:none;/* 文本不可复制 */
+      width: 96%;
+      padding: 10px 2%;
+      background: rgba(145, 10, 10, 0.2);
+      /* position: fixed;
+      top: 0px;
+      left: 0px; */
+      position: absolute;
+      /* cursor: move; */
+    }
+
+    .music .music-cell{
+      border-bottom:1px solid red;
+      padding: 10px 2%;
+      display: flex;
+      justify-content:space-around;
+      align-items: center;
+    }
+
+    .music .music-cell #bgred,
+    .music .music-cell #bgback,
+    .music .music-cell #bgpink{
+      width: 22px;
+      height: 22px;
+      border:1px solid red;
+      border-radius: 50%;
+    }
+
+    .music .music-cell #music-title{
+      color:red;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .music .music-cell #bgred{
+      background: rgba(97, 11, 26, 0.2);
+    }
+
+    .music .music-cell #bgback{
+      background: rgba(226, 11, 14, 0.2);
+    }
+
+    .music .music-cell #bgpink{
+      background: rgba(15, 230, 8, 0.2);
+    }
+
+    .music .music-bg {
+      /* background: rgba(255,255,255,0.2) */
+    }
+
+    .music .music-bg span {
+      display: inline-block;
+      color:#fff;
+    }
+
+    .music .music-bg .music-in {
+      color: #950217;
+    }
+
+    .music .music-bg .music-bg-top {
+      text-align: left;
+      padding: 10px 0;
+    }
+
+    .music .music-bg .music-bg-top span {
+      /* color:#950217; */
+    }
+
+    .music .music-bg .music-bg-bottom {
+      text-align: right;
+      padding: 10px 0;
+    }
+
+    .music .music-bg .music-bg-bottom span {
+      /* color:#950217; */
+    }
+  </style>
+  <!-- onmousedown="mousedown(event)" onmouseup="mouseup(event)" -->
+  <div class="music" id="music" onclick='cellMusic(event)'>
+    <div class="music-cell" id="music-cell">
+      <span id="music-title"></span>
+      <span onclick="changeSize(1)">A+</span>
+      <span onclick="changeSize(0)">A-</span>
+      <span id="stopmusic" onclick="stopMusic()">||</span>
+      <span id="startmusic" onclick="startMusic(event)">>></span>
+      <span id="bgred" onclick="bgChange(0)"></span>
+      <span id="bgback" onclick="bgChange(1)"></span>
+      <span id="bgpink" onclick="bgChange(2)"></span>
+    </div>
+    <!-- onclick="beginMusic(event)" -->
+    <div class="music-bg" onclick="displayCell(event)">
+      <div class="music-bg-top">
+        <span class="music-in" id="music-in"></span><span class="music-out" id="music-out"></span>
+      </div>
+      <div class="music-bg-bottom">
+        <span class="music-in" id='music-in-bottom'></span><span class="music-out" id="music-out-bottom"></span>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var musicIn = document.getElementById('music-in');
+    var music = document.getElementById('music');
+    var musiccell = document.getElementById('music-cell');
+    var musicOut = document.getElementById('music-out');
+    var stopmusic = document.getElementById('stopmusic');
+    var startmusic = document.getElementById('startmusic');
+    var musictitle = document.getElementById('music-title');
+    var musicInB = document.getElementById('music-in-bottom');
+    var musicOutB = document.getElementById('music-out-bottom');
+    var num = 0;//定时器的秒数上
+    var n = 0;//定时器的秒数下
+    var fontSize = 16;//字体大小
+    var musicStart = '';//定时器上
+    var musicStartB = '';//定时器下
+    var isClick = 0;//防止重复点击 0:未点击 1:已点击
+    //这些数据以后可以动态生成
+    var musicBillT = '小酒窝，长睫毛';//歌词上
+    var musicBillB = '是你最美好的记号';//歌词下
+    var musicTitle = '小酒窝';//歌词标题
+
+    var musicStr = musicBillT;//上行歌词 字符串
+    var musicArr = musicStr.split('');//上行歌词 数组
+    var musicStrB = musicBillB;//下行歌词 字符串
+    var musicArrB = musicStrB.split('');//下行歌词 数组
+
+    var musicOutArr = [];//上行歌词不高亮 
+    var musicOutStr = '';//上行歌词不高亮 
+    var musicOutArrB = [];//下行歌词不高亮 
+    var musicOutStrB = '';//下行歌词不高亮 
+
+    window.onload = function () {//页面初次渲染
+      musicOut.innerHTML = musicBillT;
+      musictitle.innerHTML = musicTitle;
+      isClick = 1;
+      commonBeginMusic()
+      stopmusic.style.display = 'none';
+      musiccell.style.display = 'none';
+      musicOutB.innerHTML = musicBillB;
+    }
+
+    function displayCell(e) {//操作面板的显示
+      e.stopPropagation();
+      musiccell.style.display = 'flex';
+      if (isClick == 1) {
+        stopmusic.style.display = 'none';
+        startmusic.style.display = 'block';
+      } else if (isClick == 0) {
+        stopmusic.style.display = 'block';
+        startmusic.style.display = 'none';
+      }
+    }
+
+    function commonBeginMusic() {//公共的开始 上行音乐
+      clearInterval(musicStart)
+      musicStart = setInterval(() => {
+        musicIn.innerHTML += musicArr[num]
+        musicOutArr = musicArr.slice(num + 1);
+        musicOutStr = musicOutArr.join('');
+        musicOut.innerHTML = musicOutStr;
+        if (num < musicArr.length) {
+          num++;
+        } else {
+          n = 0;
+          musicIn.innerHTML = musicBillT;
+          musicOut.innerHTML = '';
+          musicStr = musicBillT;
+          musicArr = musicStr.split('');
+          clearInterval(musicStart)
+          beginMusicB()
+        }
+      }, 1000);
+    }
+
+    function beginMusic(e) {//开始音乐
+      isClick = 1;
+      musiccell.style.display = 'flex';
+      stopmusic.style.display = 'block';
+      startmusic.style.display = 'none';
+      e.stopPropagation();
+      commonBeginMusic()
+      // console.log(musicIn,musicIn.innerHTML, music.style.top);
+      // music.style.top = num + 'px';
+    }
+
+    function beginMusicB() {//下行音乐开始
+      clearInterval(musicStartB)
+      musicStartB = setInterval(() => {
+        musicInB.innerHTML += musicArrB[n];
+        musicOutArrB = musicArrB.slice(n + 1);
+        musicOutStrB = musicOutArrB.join('');
+        musicOutB.innerHTML = musicOutStrB;
+        if (n < musicArrB.length) {
+          n++;
+        } else {
+          musicInB.innerHTML = '';
+          musicOutB.innerHTML = musicBillB;
+          musicStrB = musicBillB;
+          musicArrB = musicStrB.split('');
+          clearInterval(musicStartB);
+          num = 0;
+          musicIn.innerHTML = '';
+          musicOut.innerHTML = musicBillT;
+          commonBeginMusic()
+        }
+      }, 1000);
+    }
+
+    function endMusic() {//隐藏操作面板
+      isClick = 0;
+      stopmusic.style.display = 'none';
+      musiccell.style.display = 'none';
+      startmusic.style.display = 'block';
+      // clearInterval(musicStart);
+    }
+
+    function stopMusic() {//操作面板上停止音乐
+      isClick = 0;
+      clearInterval(musicStart);
+      clearInterval(musicStartB);
+      stopmusic.style.display = 'none';
+      startmusic.style.display = 'block';
+    }
+
+    function startMusic(e) {//操作面板开始音乐
+      isClick = 1;
+      beginMusic(e)
+      // stopmusic.style.display = 'block';
+      // startmusic.style.display = 'none';
+    }
+
+    function bgChange(i) {//改变背景颜色
+      let bgColor = '';
+      switch (i) {
+        case 0:
+          bgColor = 'rgba(97, 11, 26, 0.2)'
+          break;
+        case 1:
+          bgColor = 'rgba(226, 11, 14, 0.2)'
+          break;
+        case 2:
+          bgColor = 'rgba(15, 230, 8, 0.2)'
+          break;
+        default:
+          break;
+      }
+      music.style.background = bgColor;
+    }
+
+    function cellMusic(e) {//音乐的操作板
+      e.stopPropagation();
+    }
+
+    function changeSize(i) {//改变字体大小
+      if (i == 1) {
+        if (fontSize < 24) {
+          fontSize++;
+        } else {
+          fontSize = 24;
+        }
+      } else if (i == 0) {
+        if (fontSize <= 16) {
+          fontSize = 16;
+        } else {
+          fontSize--;
+        }
+      }
+      musicIn.style.fontSize = fontSize + 'px';
+      musicOut.style.fontSize = fontSize + 'px';
+      musicInB.style.fontSize = fontSize + 'px';
+      musicOutB.style.fontSize = fontSize + 'px';
+    }
+    
+    //pc端拖拽
+    // var x = 0;
+    var y = 0;
+    // var l = 0;
+    var t = 0;
+    var isDown = false;
+    //鼠标按下事件
+    music.onmousedown = function (e) {
+      console.log('onmousedown');
+      e.stopPropagation();
+      //获取x坐标和y坐标
+      // x = e.clientX;
+      y = e.clientY;
+
+      //获取左部和顶部的偏移量
+      // l = music.offsetLeft;
+      t = music.offsetTop;
+      //开关打开
+      isDown = true;
+      //设置样式  
+      music.style.cursor = 'move';
+    }
+    //鼠标移动
+    window.onmousemove = function (e) {
+      console.log('onmousemove');
+      e.stopPropagation();
+      if (isDown == false) {
+        return;
+      }
+      //获取x和y
+      var nx = e.clientX;
+      var ny = e.clientY;
+      //计算移动后的左偏移量和顶部的偏移量
+      // var nl = nx - (x - l);
+      var nt = ny - (y - t);
+
+      // music.style.left = nl + 'px';
+      music.style.top = nt + 'px';
+    }
+    //鼠标抬起事件
+    music.onmouseup = function () {
+      console.log('onmouseup');
+      //开关关闭
+      isDown = false;
+      music.style.cursor = 'default';
+    }
+
+    // function mousedown(e) {
+    //   e.stopPropagation();
+    //   console.log(e,'mousedown');
+    // } 
+
+    // function mouseup(e) {
+    //   e.stopPropagation();
+    //   console.log(e,'mouseup');
+    // }
+    
+    //移动端拖拽
+    //限制最大宽高，不让滑块出去
+    var maxW = document.body.clientWidth - music.offsetWidth;
+    var maxH = document.body.clientHeight - music.offsetHeight;
+    //手指触摸开始，记录div的初始位置
+    music.addEventListener('touchstart', function (e) {
+      var ev = e || window.event;
+      var touch = ev.targetTouches[0];
+      oL = touch.clientX - music.offsetLeft;
+      oT = touch.clientY - music.offsetTop;
+      document.addEventListener("touchmove", defaultEvent, false);
+    });
+    //触摸中的，位置记录
+    music.addEventListener('touchmove', function (e) {
+      var ev = e || window.event;
+      var touch = ev.targetTouches[0];
+      var oLeft = touch.clientX - oL;
+      var oTop = touch.clientY - oT;
+      if (oLeft < 0) {
+        oLeft = 0;
+      } else if (oLeft >= maxW) {
+        oLeft = maxW;
+      }
+      if (oTop < 0) {
+        oTop = 0;
+      } else if (oTop >= maxH) {
+        oTop = maxH;
+      }
+      music.style.left = oLeft + 'px';
+      music.style.top = oTop + 'px';
+    });
+    //触摸结束时的处理
+    music.addEventListener('touchend', function () {
+      document.removeEventListener("touchmove", defaultEvent);
+    });
+    //阻止默认事件
+    function defaultEvent(e) {
+      e.preventDefault();
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>手机小游戏</title>
+</head>
+
+<body>
+  <style>
+    body,
+    html {
+      width: 100%;
+      height: 100%;
+      background: pink;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #game {
+      width: 100%;
+      height: 100%;
+      /* display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start; */
+      /* position: relative; */
+    }
+
+    #game .game-div {
+      /* float: left; */
+      margin-top: 2%;
+      margin-left: 1%;
+      width: 32%;
+      height: 32%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: red;
+      font-size: 32px;
+      position: absolute;
+    }
+  </style>
+  <div id="game">
+    <!-- <div class="game-div">
+      <span class="game-span">1</span>
+    </div>
+    <div class="game-div">
+      <span class="game-span">2</span>
+    </div>
+    <div class="game-div">
+      <span class="game-span">3</span>
+    </div>
+    <div class="game-div">
+      <span class="game-span">4</span>
+    </div>
+    <div class="game-div">
+      <span class="game-span">5</span>
+    </div>
+    <div class="game-div">
+      <span class="game-span">6</span>
+    </div>
+    <div class="game-div">
+      <span class="game-span">7</span>
+    </div> -->
+    <div class="game-div">
+      <span class="game-span" id="gamespan">8</span>
+    </div>
+  </div>
+  <script>
+    // var gamespan = document.getElementsByClassName('game-span')[7]
+
+    //移动端 拖拽
+    //限制最大宽高，不让滑块出去
+    var maxW = document.body.clientWidth - gamespan.offsetWidth;
+    var maxH = document.body.clientHeight - gamespan.offsetHeight;
+    //手指触摸开始，记录div的初始位置
+    gamespan.addEventListener('touchstart', function (e) {
+      var ev = e || window.event;
+      var touch = ev.targetTouches[0];
+      oL = touch.clientX - gamespan.offsetLeft;
+      oT = touch.clientY - gamespan.offsetTop;
+      document.addEventListener("touchmove", defaultEvent, false);
+    });
+    //触摸中的，位置记录
+    gamespan.addEventListener('touchmove', function (e) {
+      var ev = e || window.event;
+      var touch = ev.targetTouches[0];
+      var oLeft = touch.clientX - oL;
+      var oTop = touch.clientY - oT;
+      if (oLeft < 0) {
+        oLeft = 0;
+      } else if (oLeft >= maxW) {
+        oLeft = maxW;
+      }
+      if (oTop < 0) {
+        oTop = 0;
+      } else if (oTop >= maxH) {
+        oTop = maxH;
+      }
+      gamespan.style.left = oLeft + 'px';
+      gamespan.style.top = oTop + 'px';
+    });
+    //触摸结束时的处理
+    gamespan.addEventListener('touchend', function () {
+      document.removeEventListener("touchmove", defaultEvent);
+    });
+    //阻止默认事件
+    function defaultEvent(e) {
+      console.log(e);
+      e.preventDefault();
+    }
+
+    //pc端拖拽 
+    var x = 0;
+    var y = 0;
+    var l = 0;
+    var t = 0;
+    var isDown = false;
+    //鼠标按下事件
+    gamespan.onmousedown = function (e) {
+      //获取x坐标和y坐标
+      x = e.clientX;
+      y = e.clientY;
+
+      //获取左部和顶部的偏移量
+      l = gamespan.offsetLeft;
+      t = gamespan.offsetTop;
+      //开关打开
+      isDown = true;
+      //设置样式  
+      gamespan.style.cursor = 'move';
+    }
+    //鼠标移动
+    window.onmousemove = function (e) {
+      if (isDown == false) {
+        return;
+      }
+      //获取x和y
+      var nx = e.clientX;
+      var ny = e.clientY;
+      //计算移动后的左偏移量和顶部的偏移量
+      var nl = nx - (x - l);
+      var nt = ny - (y - t);
+
+      gamespan.style.left = nl + 'px';
+      gamespan.style.top = nt + 'px';
+    }
+    //鼠标抬起事件
+    gamespan.onmouseup = function () {
+      //开关关闭
+      isDown = false;
+      gamespan.style.cursor = 'default';
+    }
+  </script>
+</body>
+
+</html>
