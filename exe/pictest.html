@@ -58,7 +58,7 @@
     .pictest .pictest-left{
       display: flex;
       flex-direction:column;
-      justify-content:space-between;
+      justify-content:flex-start;
       margin-left: 2%;
       width: 28%;
       text-align: left;
@@ -136,6 +136,9 @@
     }
 
     function aginTest() {//随机获取六个字符串
+      span.innerHTML = '请填写图片中的字符，不区分大小写';
+      span.style.color = '#bdbdbd';
+      input.value = '';
       clearCanvas()//清除画布
       str = '';
       color = '';
